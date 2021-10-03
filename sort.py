@@ -4,6 +4,17 @@ import shutil
 import os
 
 
+folder_names = ['archives', 'video', 'audio', 'documents', 'images']
+
+sorting_dict = {
+    'archives': ('ZIP', 'GZ', 'TAR'),
+    'video': ('AVI', 'MP4', 'MOV', 'MKV'),
+    'audio': ('MP3', 'OGG', 'WAV', 'AMR'),
+    'documents': ('DOC', 'DOCX', 'TXT', 'PDF', 'XLSX', 'PPTX'),
+    'images': ('JPEG', 'PNG', 'JPG', 'SVG'),
+}
+
+
 def main():
     #folder_path = sys.argv[1]
     folder_path = "/home/keshasan/Desktop/projects/test-folder-tree/"
@@ -24,12 +35,12 @@ def get_files(path):
 
 def recursive_walk_direcory(path: pathlib.Path, list_files: list):
 
-    if path.is_dir() and path.name not in ('archives', 'video', 'audio', 'documents', 'images'):
+    if path.is_dir() and path.name not in folder_names:
         for element in path.iterdir():
             recursive_walk_direcory(element, list_files)
     else:
         with open(path.as_posix(), 'rb') as f:
-            file_bytes = f.read()
+            file_bytes = f.read(30)
             list_files.append([path.as_posix(), path.name, file_bytes])
 
 
