@@ -74,5 +74,22 @@ def normalize(name: str):
     return rx.sub('_', name.translate(map_cyr_to_latin))
 
 
+def remove_empty_folders(path: Path):
+    '''
+        Recursively removes empty folders + renames folders using 'normalize function'
+    '''
+    if path.is_dir() and path.name not in folder_names:
+        for element in path.iterdir():
+            if element.is_dir():
+                shutil.move(element, element.parent.joinpath(
+                    normalize(normalize(element.name))))
+                element = element.parent.joinpath(
+                    normalize(normalize(element.name)))
+                remove_empty_folders(element)
+
+        if len([element for element in path.iterdir()]) == 0:
+            shutil.rmtree(path)
+
+
 if __name__ == '__main__':
     main()
