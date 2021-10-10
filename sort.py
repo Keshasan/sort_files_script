@@ -30,6 +30,8 @@ def main():
         return
 
     recursive_sort_directory(folder_path, main_dir)
+    remove_empty_folders(folder_path)
+    unpack_archives(folder_path)
 
 
 def recursive_sort_directory(path: Path, main_dir: Path):
@@ -79,6 +81,7 @@ def remove_empty_folders(path: Path):
         Recursively removes empty folders + renames folders using 'normalize function'
     '''
     if path.is_dir() and path.name not in folder_names:
+
         for element in path.iterdir():
             if element.is_dir():
                 shutil.move(element, element.parent.joinpath(
@@ -89,6 +92,21 @@ def remove_empty_folders(path: Path):
 
         if len([element for element in path.iterdir()]) == 0:
             shutil.rmtree(path)
+
+
+def unpack_archives(path: Path):
+    '''
+        Checks if folder "archives" exists, then unpack archive + removes it 
+    '''
+    archives_folder = path.joinpath('archives')
+
+    if not archives_folder.exists():
+        return
+
+    for archive in archives_folder.iterdir():
+        destination = archive.parent.joinpath(archive.name.split('.')[0])
+        shutil.unpack_archive(archive, destination)
+        archive.unlink()
 
 
 if __name__ == '__main__':
