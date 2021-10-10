@@ -16,13 +16,12 @@ sorting_dict = {
 
 
 def main():
-    #folder_path = sys.argv[1]
+    folder_path = sys.argv[1]
+
     if len(sys.argv) > 2:
         print('Too much arguments.')
         return
 
-    # Remove this to production
-    folder_path = "/home/keshasan/Documents/projects/test-folder-tree/"
     folder_path = Path(folder_path)
     main_dir = folder_path
     if not folder_path.exists():
